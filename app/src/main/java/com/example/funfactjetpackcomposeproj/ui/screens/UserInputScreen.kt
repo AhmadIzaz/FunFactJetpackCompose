@@ -19,14 +19,17 @@ import com.example.funfactjetpackcomposeproj.data.UserDataUiEvents
 
 
 @Composable
-fun UserInputScreen(userInputViewModel: UserInputViewModel) {
+fun UserInputScreen(
+    userInputViewModel: UserInputViewModel,
+    showWelcomeScreen: (valuesPair: Pair<String, String>) -> Unit
+) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(18.dp)
         ) {
-            TopBar("Hi Ahmad! \uD83D\uDE0A")
+            TopBar("Hi There! \uD83D\uDE0A")
 
             TextComponent(textValue = "Let us Learn about you !", textSize = 24.sp)
 
@@ -55,12 +58,12 @@ fun UserInputScreen(userInputViewModel: UserInputViewModel) {
 
             Row(modifier = Modifier.fillMaxWidth()) {
                 AnimalCard(
-                    R.drawable.ic_launcher_background, animalSelected = {
+                    R.drawable.cat, animalSelected = {
                         userInputViewModel.onEvent(UserDataUiEvents.AnimalSelected(it))
                     }, selected = userInputViewModel.uiState.value.animalSelected == "Cat"
                 )
 
-                AnimalCard(R.drawable.ic_launcher_foreground, animalSelected = {
+                AnimalCard(R.drawable.dog, animalSelected = {
                     userInputViewModel.onEvent(UserDataUiEvents.AnimalSelected(it))
                 }, selected = userInputViewModel.uiState.value.animalSelected == "Dog")
 
@@ -69,7 +72,12 @@ fun UserInputScreen(userInputViewModel: UserInputViewModel) {
             Spacer(modifier = Modifier.weight(1f))
 
             if (userInputViewModel.isValidState()) ButtonComponent(onClick = {
-
+                showWelcomeScreen(
+                    Pair(
+                        userInputViewModel.uiState.value.nameEntered,
+                        userInputViewModel.uiState.value.animalSelected
+                    )
+                )
             })
             else {
             }
